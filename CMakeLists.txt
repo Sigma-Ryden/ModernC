@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(ModerC LANGUAGES C)
+project(ModernC LANGUAGES C)
 
-add_executable(ModerC
+add_executable(ModernC
 	oopcore.h
 	IEntity.h
 	IHuman.h

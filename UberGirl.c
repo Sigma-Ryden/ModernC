@@ -6,5 +6,5 @@ CONSTRUCTOR(UberGirl)(const char* name, int age) {
 }
 
 DESTRUCTOR(UberGirl)() {
-    DESTRUCT_PARENT(Girl);
+    DESTRUCT_PARENT(Girl)();
 }

@@ -17,10 +17,11 @@
 #define CONSTRUCT(sname) sname##_Constructor( (sname*)calloc(1, sizeof(sname)) CONSTRUCT_IMPLEMENTATION
 #define CONSTRUCT_PARENT(psname) psname##_Constructor(CAST(self, psname) CONSTRUCT_IMPLEMENTATION
 
-#define DESTRUCT_IMPLEMENTATION(self) (self); free(self)
-#define DESTRUCT(sname) sname##_Destructor DESTRUCT_IMPLEMENTATION
+#define DESTRUCT_IMPLEMENTATION(self, ...) self, ## __VA_ARGS__); free(self)
+#define DESTRUCT(sname) sname##_Destructor( DESTRUCT_IMPLEMENTATION
 
-#define DESTRUCT_PARENT(sname) sname##_Destructor(CAST(self, sname))
+#define DESTRUCT_PARENT_IMPLEMENTATION(self, ...) , ## __VA_ARGS__);
+#define DESTRUCT_PARENT(sname) sname##_Destructor(CAST(self, sname) DESTRUCT_PARENT_IMPLEMENTATION
 
 #define INIT(...) } __VA_ARGS__
 
@@ -31,6 +32,7 @@
 #define INTERFACE(name) typedef struct I##name I##name; struct I##name { union { char TYPE_I##name[1]; struct INTERFACE_##name };
 
 #define CAST(pointer, to) ((to*)&pointer->TYPE_##to)
+#define BASE(psname) CAST(self, psname)
 
 // (to*)((char*)pointer-(ptrdiff_t)offsetof(to, type_##from))
 #define DOWNCAST(pointer, from, to) ((to*)((char*)pointer-(ptrdiff_t)offsetof(to, TYPE_##from)))

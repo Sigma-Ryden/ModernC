@@ -24,6 +24,7 @@ CONSTRUCTOR(Girl)(const char* name, int age) {
 }
 
 DESTRUCTOR(Girl)() {
+    DESTRUCT_PARENT(Ticket)();
     printf("Bye, %s!\n", self->Name);
 }
 
