@@ -35,7 +35,7 @@ void TestOOPCore() {
 #define __EXTENDS(type) \
     union { \
         char __CLASS_##type[sizeof(type)]; \
-        struct CLASS_##type \
+        struct TYPE_##type \
     }
 
 #define __CLASS(type) \
@@ -43,7 +43,7 @@ void TestOOPCore() {
     struct type { \
         union { \
             char __CLASS_##type[1]; \
-            struct CLASS_##type \
+            struct TYPE_##type \
         };
 
 #define __INTERFACE(type) \
@@ -51,7 +51,7 @@ void TestOOPCore() {
     struct type { \
         union { \
             char __INTERFACE_##type[1]; \
-            struct CLASS_##type \
+            struct TYPE_##type \
         };
 
 #define __INIT(...) } __VA_ARGS__
@@ -59,8 +59,8 @@ void TestOOPCore() {
 #define __VIRTUAL_TABLE(interface, type) \
     const interface interface##_##type = { \
 
-#define __VIRTUAL_FUNCTION(vfunction, function) \
-    .vfunction = &function,
+#define __BIND_FUNCTION(bind, function) \
+    .bind = &function,
 
 
 #define __CAST(pointer, to) (to*)(&pointer->__CLASS_##to)
@@ -68,13 +68,12 @@ void TestOOPCore() {
 #define __DOWNCAST(pointer, from, to) (to*)((char*)pointer-(ptrdiff_t)offsetof(to, __CLASS_##from));
 #define __INTERFACE_IMPLEMENTATION(pointer, from, to) (to*)((char*)(&pointer)-(ptrdiff_t)offsetof(to, __INTERFACE_##from));
 
-
-
-#define CLASS_Interface { \
+// EXAMPLE:
+#define TYPE_Interface { \
     void(*DoSomething)(void*); \
 };
 
-#define CLASS_InterfaceCore { \
+#define TYPE_InterfaceCore { \
     void*(*Meta)(); \
 };
 
@@ -85,11 +84,11 @@ __INTERFACE(Interface)
     __EXTENDS(InterfaceCore);
 __INIT();
 
-#define CLASS_Implementation { \
+#define TYPE_Implementation { \
     void* SomeData; \
 };
 
-#define CLASS_Object { \
+#define TYPE_Object { \
     int ID; \
 };
 
@@ -109,8 +108,8 @@ void* Implementation_Meta() {
 }
 
 __VIRTUAL_TABLE(Interface, Implementation)
-    __VIRTUAL_FUNCTION(DoSomething, Implementation_DoSomething)
-    __VIRTUAL_FUNCTION(Meta, Implementation_Meta)
+    __BIND_FUNCTION(DoSomething, Implementation_DoSomething)
+    __BIND_FUNCTION(Meta, Implementation_Meta)
 __INIT();
 
 void TestDownCast(Interface* interface) {
