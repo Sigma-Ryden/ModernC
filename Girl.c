@@ -12,10 +12,10 @@ DESTRUCTOR(Ticket)() {
 CONSTRUCTOR(Girl)(const char* name, int age) {
     CONSTRUCT_PARENT(Ticket)();
 
-    self->Run = &Girl_Run;
-
     self->PrintName = &Girl_PrintName;
     self->GetAge = &Girl_GetAge;
+
+    BASE(IRunable)->Run = &Girl_Run;
 
     self->Name = name;
     self->Age = age;
