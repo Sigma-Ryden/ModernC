@@ -4,10 +4,8 @@ project(ModernC LANGUAGES C)
 
 add_executable(ModernC
 	oopcore.h
-	IEntity.h
-	IHuman.h
-	IRunable.h
-	Girl.h Girl.c
-	UberGirl.h UberGirl.c
+	IAnimal.h
+	Cat.h Cat.c
+	Dog.h Dog.c
 	main.c
 )
