@@ -77,7 +77,7 @@ void TestOOPCore() {
     void*(*Meta)(); \
 };
 
-__CLASS(InterfaceCore)
+__INTERFACE(InterfaceCore)
 __INIT();
 
 __INTERFACE(Interface)
