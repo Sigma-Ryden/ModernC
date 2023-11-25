@@ -11,13 +11,12 @@ DESTRUCTOR(TSmart)() {
 }
 
 VIRTUAL_TABLE(IAnimal, TDog)
-    BIND_FUNCTION(ShowInfo, TDog_ShowInfo)
+    OVERRIDE_FUNCTION(ShowInfo, TDog_ShowInfo)
 INIT()
 
 CONSTRUCTOR(TDog)(const char* name, int force) {
     CONSTRUCT_PARENT(TSmart)();
-
-    BIND_VIRTUAL_TABLE(self, IAnimal, TDog);
+    CONSTRUCT_INTERFACE(IAnimal, TDog)();
 
     TO_PARENT(self, TSmart)->Name = name;
     self->Force = force;

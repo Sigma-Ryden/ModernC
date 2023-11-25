@@ -3,11 +3,11 @@
 #include <stdio.h>
 
 VIRTUAL_TABLE(IAnimal, TCat)
-    BIND_FUNCTION(ShowInfo, TCat_ShowInfo)
+    OVERRIDE_FUNCTION(ShowInfo, TCat_ShowInfo)
 INIT()
 
 CONSTRUCTOR(TCat)(int speed) {
-    BIND_VIRTUAL_TABLE(self, IAnimal, TCat);
+    CONSTRUCT_INTERFACE(IAnimal, TCat)();
 
     self->Speed = speed;
 
