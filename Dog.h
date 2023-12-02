@@ -10,8 +10,8 @@
 CLASS(TSmart)
 INIT()
 
-CONSTRUCTOR(TSmart)();
-DESTRUCTOR(TSmart)();
+CONSTRUCTOR(TSmart);
+DESTRUCTOR(TSmart);
 
 #define TYPE_TDog { \
     int Force; \
@@ -22,9 +22,9 @@ CLASS(TDog)
     EXTENDS(TSmart)
 INIT()
 
-CONSTRUCTOR(TDog)(const char* name, int force);
-DESTRUCTOR(TDog)();
+CONSTRUCTOR(TDog, const char* name, int force);
+DESTRUCTOR(TDog);
 
-void FUNCTION(void, TDog_ShowInfo)();
+void FUNCTION(void, TDog_ShowInfo);
 
 #endif // DOG_H

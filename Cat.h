@@ -11,9 +11,9 @@ CLASS(TCat)
     IMPLEMENTS(IAnimal)
 INIT()
 
-CONSTRUCTOR(TCat)(int speed);
-DESTRUCTOR(TCat)();
+CONSTRUCTOR(TCat, int speed);
+DESTRUCTOR(TCat);
 
-void FUNCTION(void, TCat_ShowInfo)();
+void FUNCTION(void, TCat_ShowInfo);
 
 #endif // CAT_H

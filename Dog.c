@@ -2,11 +2,11 @@
 
 #include <stdio.h>
 
-CONSTRUCTOR(TSmart)() {
+CONSTRUCTOR(TSmart) {
     return self;
 }
 
-DESTRUCTOR(TSmart)() {
+DESTRUCTOR(TSmart) {
     return self;
 }
 
@@ -14,23 +14,23 @@ VIRTUAL_TABLE(IAnimal, TDog)
     OVERRIDE_FUNCTION(ShowInfo, TDog_ShowInfo)
 INIT()
 
-CONSTRUCTOR(TDog)(const char* name, int force) {
-    CONSTRUCT_PARENT(TSmart)();
-    CONSTRUCT_INTERFACE(IAnimal, TDog)();
+CONSTRUCTOR(TDog, const char* name, int force) {
+    CONSTRUCT_PARENT(TSmart);
+    CONSTRUCT_INTERFACE(IAnimal, TDog);
 
-    TO_PARENT(self, TSmart)->Name = name;
+    TO_PARENT(TSmart, self)->Name = name;
     self->Force = force;
 
     printf("Create Dog\n");
     return self;
 }
 
-DESTRUCTOR(TDog)() {
+DESTRUCTOR(TDog) {
     printf("Destoy Dog\n");
     return self;
 }
 
-void FUNCTION(void, TDog_ShowInfo)() {
-    TDog* dog = TO_CHILD(self, IAnimal, TDog);
+void FUNCTION(void, TDog_ShowInfo) {
+    TDog* dog = TO_CHILD(IAnimal, TDog, self);
     printf("Dog name: %s, force: %i\n", dog->Name, dog->Force);
 }

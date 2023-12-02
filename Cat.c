@@ -6,8 +6,8 @@ VIRTUAL_TABLE(IAnimal, TCat)
     OVERRIDE_FUNCTION(ShowInfo, TCat_ShowInfo)
 INIT()
 
-CONSTRUCTOR(TCat)(int speed) {
-    CONSTRUCT_INTERFACE(IAnimal, TCat)();
+CONSTRUCTOR(TCat, int speed) {
+    CONSTRUCT_INTERFACE(IAnimal, TCat);
 
     self->Speed = speed;
 
@@ -15,12 +15,12 @@ CONSTRUCTOR(TCat)(int speed) {
     return self;
 }
 
-DESTRUCTOR(TCat)() {
+DESTRUCTOR(TCat) {
     printf("Destoy Cat\n");
     return self;
 }
 
-void FUNCTION(void, TCat_ShowInfo)() {
-    TCat* cat = TO_CHILD(self, IAnimal, TCat);
+void FUNCTION(void, TCat_ShowInfo) {
+    TCat* cat = TO_CHILD(IAnimal, TCat, self);
     printf("Cat speed: %i\n", cat->Speed);
 }
