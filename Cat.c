@@ -7,6 +7,7 @@ VIRTUAL_TABLE(IAnimal, TCat)
 INIT()
 
 CONSTRUCTOR(TCat, int speed) {
+    CONSTRUCT_SELF(TCat);
     CONSTRUCT_PARENT(IAnimal);
 
     self->Speed = speed;

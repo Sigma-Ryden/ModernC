@@ -4,10 +4,11 @@
 int main() {
     {
         TCat* cat = CONSTRUCT(TCat, 40);
+
         IAnimal* animal = UPCAST(IAnimal, cat);
         animal->ShowInfo(animal);
 
-        VIRTUAL_DESTRUCT(animal);
+        DESTRUCT(animal);
     }
     {
         TDog* dog = CONSTRUCT(TDog, "Jack", 200);
@@ -18,7 +19,7 @@ int main() {
         IAnimal* animal = UPCAST(IAnimal, other_dog);
         animal->ShowInfo(animal);
 
-        DESTRUCT(TDog, dog);
+        DESTRUCT(dog);
     }
     return 0;
 }
