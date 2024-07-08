@@ -4,8 +4,8 @@
 int main() {
     {
         TCat* cat = CONSTRUCT(TCat, 40);
-        IAnimal** animal = TO_INTERFACE(IAnimal, cat);
-        (*animal)->ShowInfo(animal);
+        IAnimal* animal = TO_INTERFACE(IAnimal, cat);
+        animal->ShowInfo(animal);
 
         VIRTUAL_DESTRUCT(animal);
     }
@@ -15,8 +15,8 @@ int main() {
         TSmart* smart = TO_PARENT(TSmart, dog);
         TDog* other_dog = TO_CHILD(TSmart, TDog, smart);
 
-        IAnimal** animal = TO_INTERFACE(IAnimal, other_dog);
-        (*animal)->ShowInfo(animal);
+        IAnimal* animal = TO_INTERFACE(IAnimal, other_dog);
+        animal->ShowInfo(animal);
 
         DESTRUCT(TDog, dog);
     }

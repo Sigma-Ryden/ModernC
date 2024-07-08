@@ -5,7 +5,7 @@
 #include <stddef.h>
 
 #define TO_PARENT(to, ptr) ((to*)(&ptr->__to_parent_##to))
-#define TO_INTERFACE(to, ptr) ((to**)(&ptr->__to_interface_##to))
+#define TO_INTERFACE(to, ptr) ((to*)(&ptr->__to_interface_##to))
 #define TO_CHILD(from, to, ptr) ((to*)((char*)ptr-(ptrdiff_t)offsetof(to, __to_child_##from)))
 
 #define FUNCTION(type, name, ...) name(type *const self, ## __VA_ARGS__)
@@ -23,19 +23,17 @@
 
 #define CONSTRUCT(type, ...) (type*)type##_Constructor(ALLOCATE(type), ## __VA_ARGS__)
 #define CONSTRUCT_PARENT(type, ...) (type*)type##_Constructor(TO_PARENT(type, self), ## __VA_ARGS__)
-#define CONSTRUCT_INTERFACE(interface, type) self->interface = &__vtable_##interface##_##type;
+#define CONSTRUCT_INTERFACE(interface, type) *TO_INTERFACE(interface, self) = __vtable_##interface##_##type;
 
 #define DESTRUCT(type, ptr) DEALLOCATE(type##_Destructor(ptr))
 #define DESTRUCT_PARENT(type) type##_Destructor(TO_PARENT(self, type))
-#define VIRTUAL_DESTRUCT(ptr) DEALLOCATE((*ptr)->__child_destructor((*ptr)->__child_implementation(ptr)))
+#define VIRTUAL_DESTRUCT(ptr) DEALLOCATE(ptr->__child_destructor(ptr->__child_implementation(ptr)))
 
 #define IMPLEMENTS(type)                                                                                \
     union {                                                                                             \
         char __to_interface_##type[sizeof(type)];                                                       \
         char __to_child_##type[sizeof(type)];                                                           \
-        struct {                                                                                        \
-            const type* type;                                                                           \
-        };                                                                                              \
+        struct TYPE_##type                                                                              \
     };
 
 #define EXTENDS(type)                                                                                   \
