@@ -7,7 +7,7 @@ VIRTUAL_TABLE(IAnimal, TCat)
 INIT()
 
 CONSTRUCTOR(TCat, int speed) {
-    CONSTRUCT_INTERFACE(IAnimal, TCat);
+    CONSTRUCT_PARENT(IAnimal);
 
     self->Speed = speed;
 
@@ -17,10 +17,12 @@ CONSTRUCTOR(TCat, int speed) {
 
 DESTRUCTOR(TCat) {
     printf("Destoy Cat\n");
+
+    DESTRUCT_PARENT(IAnimal);
     return self;
 }
 
 void FUNCTION(void, TCat_ShowInfo) {
-    TCat* cat = TO_CHILD(IAnimal, TCat, self);
+    TCat* cat = DOWNCAST(IAnimal, TCat, self);
     printf("Cat speed: %i\n", cat->Speed);
 }

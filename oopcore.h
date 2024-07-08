@@ -4,39 +4,23 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#define TO_PARENT(to, ptr) ((to*)(&ptr->__to_parent_##to))
-#define TO_INTERFACE(to, ptr) ((to*)(&ptr->__to_interface_##to))
-#define TO_CHILD(from, to, ptr) ((to*)((char*)ptr-(ptrdiff_t)offsetof(to, __to_child_##from)))
+#define UPCAST(to, ptr) ((to*)(&(ptr)->__to_parent_##to))
+#define DOWNCAST(from, to, ptr) ((to*)((char*)(ptr)-(ptrdiff_t)offsetof(to, __to_child_##from)))
 
 #define FUNCTION(type, name, ...) name(type *const self, ## __VA_ARGS__)
 
 #define CONSTRUCTOR(type, ...) void* type##_Constructor(type *const self, ## __VA_ARGS__)
 #define DESTRUCTOR(type, ...) void* type##_Destructor(type *const self, ## __VA_ARGS__)
 
-#ifndef ALLOCATE
-    #define ALLOCATE(type) (type*)calloc(1, sizeof(type))
-#endif
+#define CONSTRUCT(type, ...) (type*)type##_Constructor((type*)calloc(1, sizeof(type)), ## __VA_ARGS__)
+#define DESTRUCT(type, ptr) free(type##_Destructor(ptr))
 
-#ifndef DEALLOCATE
-    #define DEALLOCATE(ptr) free(ptr)
-#endif
+#define CONSTRUCT_PARENT(type, ...) (type*)type##_Constructor(UPCAST(type, self), ## __VA_ARGS__)
+#define DESTRUCT_PARENT(type) type##_Destructor(UPCAST(type, self))
 
-#define CONSTRUCT(type, ...) (type*)type##_Constructor(ALLOCATE(type), ## __VA_ARGS__)
-#define CONSTRUCT_PARENT(type, ...) (type*)type##_Constructor(TO_PARENT(type, self), ## __VA_ARGS__)
-#define CONSTRUCT_INTERFACE(interface, type) *TO_INTERFACE(interface, self) = __vtable_##interface##_##type;
+#define VIRTUAL_DESTRUCT(ptr) free(ptr->__child_Destructor(ptr->__child_Part(ptr)))
 
-#define DESTRUCT(type, ptr) DEALLOCATE(type##_Destructor(ptr))
-#define DESTRUCT_PARENT(type) type##_Destructor(TO_PARENT(self, type))
-#define VIRTUAL_DESTRUCT(ptr) DEALLOCATE(ptr->__child_destructor(ptr->__child_implementation(ptr)))
-
-#define IMPLEMENTS(type)                                                                                \
-    union {                                                                                             \
-        char __to_interface_##type[sizeof(type)];                                                       \
-        char __to_child_##type[sizeof(type)];                                                           \
-        struct TYPE_##type                                                                              \
-    };
-
-#define EXTENDS(type)                                                                                   \
+#define INHERITS(type)                                                                                  \
     union {                                                                                             \
         char __to_parent_##type[sizeof(type)];                                                          \
         char __to_child_##type[sizeof(type)];                                                           \
@@ -47,11 +31,11 @@
     typedef struct type type;                                                                           \
     struct type {                                                                                       \
         union {                                                                                         \
-            char __to_interface_##type[1];                                                              \
+            char __to_parent_##type[1];                                                                 \
             struct TYPE_##type                                                                          \
         };                                                                                              \
-        void* (*__child_destructor)(void*);                                                             \
-        void* (*__child_implementation)(void*);
+        void* (*__child_Destructor)(void*);                                                             \
+        void* (*__child_Part)(void*);
 
 #define CLASS(type)                                                                                     \
     typedef struct type type;                                                                           \
@@ -64,15 +48,20 @@
 #define INIT(...) } __VA_ARGS__;
 
 #define VIRTUAL_TABLE(interface, type)                                                                  \
-    static void* __##type##_##interface##_destructor(void* self) {                                      \
+    extern const interface __vtable_##interface##_##type;                                               \
+    static void* interface##_Constructor(void* self) {                                                  \
+        *(interface*)self = __vtable_##interface##_##type;                                              \
+        return self;                                                                                    \
+    }                                                                                                   \
+    static void* __##type##_##interface##_Destructor(void* self) {                                      \
         return type##_Destructor((type*)self);                                                          \
     }                                                                                                   \
-    static void* __##type##_##interface##_implementation(void* self) {                                  \
-        return TO_CHILD(interface, type, self);                                                         \
+    static void* __##type##_##interface##_Part(void* self) {                                            \
+        return DOWNCAST(interface, type, self);                                                         \
     }                                                                                                   \
-    static const interface __vtable_##interface##_##type = {                                            \
-        .__child_destructor = &__##type##_##interface##_destructor,                                     \
-        .__child_implementation = &__##type##_##interface##_implementation,
+    const interface __vtable_##interface##_##type = {                                                   \
+        .__child_Destructor = &__##type##_##interface##_Destructor,                                     \
+        .__child_Part = &__##type##_##interface##_Part,
 
 #define OVERRIDE_FUNCTION(bind, function) .bind = &function,
 

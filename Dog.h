@@ -18,8 +18,8 @@ DESTRUCTOR(TSmart);
 };
 
 CLASS(TDog)
-    IMPLEMENTS(IAnimal)
-    EXTENDS(TSmart)
+    INHERITS(IAnimal)
+    INHERITS(TSmart)
 INIT()
 
 CONSTRUCTOR(TDog, const char* name, int force);

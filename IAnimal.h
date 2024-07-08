@@ -10,4 +10,6 @@
 INTERFACE(IAnimal)
 INIT()
 
+DESTRUCTOR(IAnimal);
+
 #endif // IANIMAL_H

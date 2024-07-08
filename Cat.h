@@ -8,7 +8,7 @@
 };
 
 CLASS(TCat)
-    IMPLEMENTS(IAnimal)
+    INHERITS(IAnimal)
 INIT()
 
 CONSTRUCTOR(TCat, int speed);

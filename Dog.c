@@ -16,9 +16,9 @@ INIT()
 
 CONSTRUCTOR(TDog, const char* name, int force) {
     CONSTRUCT_PARENT(TSmart);
-    CONSTRUCT_INTERFACE(IAnimal, TDog);
+    CONSTRUCT_PARENT(IAnimal);
 
-    TO_PARENT(TSmart, self)->Name = name;
+    UPCAST(TSmart, self)->Name = name;
     self->Force = force;
 
     printf("Create Dog\n");
@@ -27,10 +27,13 @@ CONSTRUCTOR(TDog, const char* name, int force) {
 
 DESTRUCTOR(TDog) {
     printf("Destoy Dog\n");
+
+    DESTRUCT_PARENT(IAnimal);
+    DESTRUCT_PARENT(TSmart);
     return self;
 }
 
 void FUNCTION(void, TDog_ShowInfo) {
-    TDog* dog = TO_CHILD(IAnimal, TDog, self);
+    TDog* dog = DOWNCAST(IAnimal, TDog, self);
     printf("Dog name: %s, force: %i\n", dog->Name, dog->Force);
 }
