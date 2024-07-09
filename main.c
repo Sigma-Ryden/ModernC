@@ -3,15 +3,15 @@
 
 int main() {
     {
-        TCat* cat = CONSTRUCT(TCat, 40);
+        TCat* cat = NEW(TCat, 40);
 
         IAnimal* animal = UPCAST(IAnimal, cat);
         animal->ShowInfo(animal);
 
-        DESTRUCT(animal);
+        DELETE(animal);
     }
     {
-        TDog* dog = CONSTRUCT(TDog, "Jack", 200);
+        TDog* dog = NEW(TDog, "Jack", 200);
 
         TSmart* smart = UPCAST(TSmart, dog);
         TDog* other_dog = DOWNCAST(TSmart, TDog, smart);
@@ -19,7 +19,18 @@ int main() {
         IAnimal* animal = UPCAST(IAnimal, other_dog);
         animal->ShowInfo(animal);
 
-        DESTRUCT(dog);
+        DELETE(dog);
+    }
+    {
+        TCat place;
+        TCat* cat = CONSTRUCT(TCat, &place, 32);
+
+        place.Speed = 28;
+
+        IAnimal* animal = UPCAST(IAnimal, cat);
+        animal->ShowInfo(animal);
+
+        DESTRUCT(cat);
     }
     return 0;
 }

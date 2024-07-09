@@ -12,12 +12,15 @@
 #define CONSTRUCTOR(type, ...) void* type##_Constructor(type *const self, ## __VA_ARGS__)
 #define DESTRUCTOR(type, ...) void* type##_Destructor(type *const self, ## __VA_ARGS__)
 
-#define CONSTRUCT(type, ...) (type*)type##_Constructor((type*)calloc(1, sizeof(type)), ## __VA_ARGS__)
-#define DESTRUCT(ptr) free(ptr->__destructor(ptr))
+#define CONSTRUCT(type, place, ...) (type*)type##_Constructor(place, ## __VA_ARGS__)
+#define DESTRUCT(ptr) (ptr)->__destructor(ptr)
 
 #define CONSTRUCT_SELF(type) self->__destructor = &type##_Destructor;
 #define CONSTRUCT_PARENT(type, ...) (type*)type##_Constructor(UPCAST(type, self), ## __VA_ARGS__)
 #define DESTRUCT_PARENT(type) type##_Destructor(UPCAST(type, self))
+
+#define NEW(type, ...) CONSTRUCT(type, ((type*)calloc(1, sizeof(type))), ## __VA_ARGS__)
+#define DELETE(ptr) free(DESTRUCT(ptr))
 
 #define INHERITS(type)                                                                                  \
     union {                                                                                             \
