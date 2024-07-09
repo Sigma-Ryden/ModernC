@@ -25,10 +25,11 @@ int main() {
         TCat place;
         TCat* cat = CONSTRUCT(TCat, &place, 32);
 
-        place.Speed = 28;
-
         IAnimal* animal = UPCAST(IAnimal, cat);
         animal->ShowInfo(animal);
+
+        place.Speed = 28;
+        cat->ShowInfo(animal);
 
         DESTRUCT(cat);
     }
