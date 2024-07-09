@@ -53,7 +53,8 @@
         return self;                                                                                    \
     }                                                                                                   \
     static void* __##type##_##interface##_Destructor(void *const self) {                                \
-        return type##_Destructor(DOWNCAST(interface, type, self));                                      \
+        type* child = DOWNCAST(interface, type, self);                                                  \
+        return child->__destructor(child);                                                              \
     }                                                                                                   \
     const interface __vtable_##interface##_##type = {                                                   \
         .__destructor = &__##type##_##interface##_Destructor,                                           \
