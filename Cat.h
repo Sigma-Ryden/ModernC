@@ -15,5 +15,6 @@ CONSTRUCTOR(TCat, int speed);
 DESTRUCTOR(TCat);
 
 void FUNCTION(void, TCat_ShowInfo);
+void FUNCTION(TCat, TCat_Voice);
 
 #endif // CAT_H

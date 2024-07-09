@@ -8,6 +8,8 @@ int main() {
         IAnimal* animal = UPCAST(IAnimal, cat);
         animal->ShowInfo(animal);
 
+        TCat_Voice(cat);
+
         DELETE(animal);
     }
     {
