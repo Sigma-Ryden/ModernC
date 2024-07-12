@@ -15,7 +15,6 @@ VIRTUAL_TABLE(IAnimal, TDog)
 INIT()
 
 CONSTRUCTOR(TDog, const char* name, int force) {
-    CONSTRUCT_SELF(TDog);
     CONSTRUCT_PARENT(TSmart);
     CONSTRUCT_PARENT(IAnimal);
 
