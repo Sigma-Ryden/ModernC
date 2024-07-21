@@ -4,11 +4,11 @@
 #include "IAnimal.h"
 
 #define TYPE_TCat { \
+    INHERITS(IAnimal) \
     int Speed; \
 };
 
 CLASS(TCat)
-    INHERITS(IAnimal)
 INIT()
 
 CONSTRUCTOR(TCat, int speed);
