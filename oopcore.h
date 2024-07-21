@@ -29,12 +29,6 @@
         char __to_parent_##type[sizeof(type)]; char __to_child_##type[sizeof(type)]; struct TYPE_##type \
     };
 
-#define INTERFACE(type)                                                                                 \
-    typedef struct type type;                                                                           \
-    struct type {                                                                                       \
-        union { char __to_parent_##type[1]; struct TYPE_##type };                                       \
-        void* (*__destructor)(type *const);
-
 #define CLASS(type)                                                                                     \
     typedef struct type type;                                                                           \
     struct type {                                                                                       \
