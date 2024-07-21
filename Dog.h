@@ -14,11 +14,11 @@ CONSTRUCTOR(TSmart);
 DESTRUCTOR(TSmart);
 
 #define TYPE_TDog { \
+    INHERITS(IAnimal) \
     int Force; \
 };
 
 CLASS(TDog)
-    INHERITS(IAnimal)
     INHERITS(TSmart)
 INIT()
 
