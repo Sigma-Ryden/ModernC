@@ -7,7 +7,7 @@
     void (*ShowInfo)(void*); \
 };
 
-INTERFACE(IAnimal)
+CLASS(IAnimal)
 INIT()
 
 DESTRUCTOR(IAnimal);
