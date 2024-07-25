@@ -1,3 +1,3 @@
 #include <stddef.h>
 
-void* __oopcore = NULL;
+void* _oopcore = NULL;
