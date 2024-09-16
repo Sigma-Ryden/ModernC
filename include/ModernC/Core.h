@@ -1,5 +1,5 @@
-#ifndef OPPCORE_H
-#define OPPCORE_H
+#ifndef MODERN_C_CORE_H
+#define MODERN_C_CORE_H
 
 #include <stdlib.h>
 #include <stddef.h>
@@ -52,4 +52,4 @@
 
 extern void* _oopcore;
 
-#endif // OPPCORE_H
+#endif // MODERN_C_CORE_H
