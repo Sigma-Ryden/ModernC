@@ -1,7 +1,7 @@
 #ifndef IANIMAL_H
 #define IANIMAL_H
 
-#include <ModernC/Core.h>
+#include <ModernC.h>
 
 #define TYPE_IAnimal { \
     void (*ShowInfo)(void*); \

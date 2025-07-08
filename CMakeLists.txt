@@ -1,24 +1,34 @@
-# base
+# [[Root]]
 cmake_minimum_required(VERSION 3.5)
 
-project(ModernCTesting LANGUAGES C)
-# ~base
+project(ModernC)
 
-# packages
-set(ModernC_DIR ${CMAKE_CURRENT_LIST_DIR}/cmake)
-find_package(ModernC REQUIRED)
-# ~packages
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 
-# test
-include_directories(test)
 
-file(GLOB_RECURSE ${PROJECT_NAME}_TEST_SOURCES test/*.c)
-file(GLOB_RECURSE ${PROJECT_NAME}_TEST_HEADERS test/*.h) # optionaly
+# [[Options]]
+option(MODERNC_BUILD_SHARED_LIBS "Build shared libraies by Default" ON)
 
-add_executable(${PROJECT_NAME}
-    ${${PROJECT_NAME}_TEST_SOURCES}
-    ${${PROJECT_NAME}_TEST_HEADERS} # optionaly
-    ${Modern_C_HEADER_FILES} # optionaly
-)
-target_link_libraries(${PROJECT_NAME} ModernC)
-# ~test
+
+# [[Binaries]]
+if(MODERNC_BUILD_SHARED_LIBS)
+    set(PROJECT_LIBS_TYPE SHARED)
+else()
+    set(PROJECT_LIBS_TYPE STATIC)
+endif()
+
+
+file(GLOB_RECURSE PROJECT_SOURCES_FILES "${CMAKE_CURRENT_LIST_DIR}/src/*.c" "${CMAKE_CURRENT_LIST_DIR}/include/*.h")
+add_library("${PROJECT_NAME}" ${PROJECT_LIBS_TYPE} ${PROJECT_SOURCES_FILES})
+target_include_directories("${PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
+
+if(MODERNC_BUILD_SHARED_LIBS)
+    set_target_properties("${PROJECT_NAME}" PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
+
+# [[Tests]]
+if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory("test")
+endif()

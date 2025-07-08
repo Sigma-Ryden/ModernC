@@ -13,8 +13,8 @@
 #define DESTRUCTOR(type, ...) void* type##_Destructor(type *const self, ## __VA_ARGS__)
 
 #define CONSTRUCT(type, place, ...)                                                                     \
-    (_oopcore=place, ((type*)_oopcore)->_destructor=&type##_Destructor,                                 \
-     (type*)type##_Constructor((type*)_oopcore, ## __VA_ARGS__))
+    (ModerncC_cache=place, ((type*)ModerncC_cache)->_destructor=&type##_Destructor,                     \
+     (type*)type##_Constructor((type*)ModerncC_cache, ## __VA_ARGS__))
 
 #define DESTRUCT(ptr) ((ptr)->_destructor(ptr), ptr->_destructor=NULL, ptr)
 
@@ -50,6 +50,6 @@
 
 #define OVERRIDE_FUNCTION(bind, function) .bind = &function,
 
-extern void* _oopcore;
+extern void* ModerncC_cache;
 
 #endif // MODERN_C_CORE_H
